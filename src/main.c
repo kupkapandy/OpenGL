@@ -7,20 +7,13 @@ static void processInput(GLFWwindow* window){
     glfwSetWindowShouldClose(window, 1);
 }
 
+float deltaTime = 0.0f;
+
 int main(void){
   GLFWwindow *window = initWindow();
 
-  vec3 vertices[960];
-  makeCircle(vertices);
-
-  for(int i = 0; i < 360; i++){
-    printf("%d: %f %f %f\n", i, vertices[i].x, vertices[i].y, vertices[i].z);
-  }
-
-  uint32_t indices[] = {
-    0, 1, 2,
-    1, 2, 3,
-  };
+  body ball = {{{0.0f, 0.0f, 0.0f}}, {0.0f, 5.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, 0.2f, 0};
+  makeCircle(&ball);
 
   const char *vertexShaderSource = readShader("res/shaders/basic.vs");
   const char *fragmentShaderSource = readShader("res/shaders/basic.fs");
@@ -63,12 +56,7 @@ int main(void){
   uint32_t VBO;
   glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  uint32_t EBO;
-  glGenBuffers(1, &EBO);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vec3) * NOFT, ball.vertices, GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
@@ -78,8 +66,6 @@ int main(void){
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-
-  float rotSpeed = radians(90.0f);
 
   float lastFrame = 0.0f;
   float curFrame = 0.0f;
@@ -98,25 +84,25 @@ int main(void){
 
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 960);
+    glDrawArrays(GL_TRIANGLES, 0, NOFT * 3);
     glBindVertexArray(0);
-    printf("%f\n", curFrame);
+
+    moveBodyVelocity(&ball, deltaTime);
+    makeCircle(&ball);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vec3) * NOFT, ball.vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     deltaTime = 0.0f;
 
-    makeCircle(vertices);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 
     glfwSwapBuffers(window);
+    glfwPollEvents();
   }
 
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
-  glDeleteBuffers(1, &EBO);
   glDeleteProgram(shaderProgram);
 
   glfwTerminate();

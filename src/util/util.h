@@ -14,7 +14,6 @@
 #define radians(_x) ((_x) * (__typeof__(_x)) (PI / 180.0f))
 #define degrees(_x) ((_x) * (__typeof__(_x)) (180.0f / PI))
 
-
 typedef struct vec3_t{
   float x;
   float y;
