@@ -12,7 +12,11 @@ float deltaTime = 0.0f;
 int main(void){
   GLFWwindow *window = initWindow();
 
-  body ball = {{{0.0f, 0.0f, 0.0f}}, {0.0f, 5.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, 0.2f, 0};
+  body ball;
+  memset(&ball, 0, sizeof(ball));
+
+  ball.radius = 0.1f;
+  ball.velocity.x = 10.0f;
   makeCircle(&ball);
 
   const char *vertexShaderSource = readShader("res/shaders/basic.vs");
@@ -56,10 +60,13 @@ int main(void){
   uint32_t VBO;
   glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vec3) * NOFT, ball.vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex) * NOFT * 3, ball.vertices, GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
+
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -77,8 +84,8 @@ int main(void){
     deltaTime = curFrame - lastFrame;
     lastFrame = curFrame;
 
-
     processInput(window);
+
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -90,8 +97,9 @@ int main(void){
     moveBodyVelocity(&ball, deltaTime);
     makeCircle(&ball);
 
+
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vec3) * NOFT, ball.vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex) * NOFT * 3, ball.vertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     deltaTime = 0.0f;
