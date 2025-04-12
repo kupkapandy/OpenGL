@@ -1,8 +1,7 @@
 #include "shader.h"
 
 
-/* Free memory after using the shader source */
-const char *readShader(const char *path){
+static const char *readShader(const char *path){
   FILE *fp;
   if((fp = fopen(path, "r")) == NULL){
     fprintf(stderr, "ERROR: WRONG PATH TO SHADER FILE!\nGiven path: %s", path);
@@ -26,6 +25,37 @@ const char *readShader(const char *path){
 
   p[fileSize] = '\0';
   return p;
+}
+
+GLuint createShader(GLenum type, const char *path){
+  const char *shaderSource = readShader(path);
+
+  GLuint shader = glCreateShader(type);
+  glShaderSource(shader, 1, &shaderSource, NULL);
+  glCompileShader(shader);
+
+  shaderLog(shader);
+
+  free((void *)shaderSource);
+  return shader;
+}
+
+GLuint createProgram(GLuint cnt, ...){
+  va_list va_ptr;
+  va_start(va_ptr, cnt);
+
+  GLuint shaderProgram = glCreateProgram();
+  for(GLuint i = 0; i < cnt; ++i){
+    GLuint shader = va_arg(va_ptr, GLuint);
+    glAttachShader(shaderProgram, shader);
+    glDeleteShader(shader);
+  }
+
+  glLinkProgram(shaderProgram);
+  programLog(shaderProgram);
+
+  va_end(va_ptr);
+  return shaderProgram;
 }
 
 

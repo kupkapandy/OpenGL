@@ -3,7 +3,8 @@
 
 #include "util/util.h"
 
-const char *readShader(const char *path);
+GLuint createShader(GLenum type, const char *path);
+GLuint createProgram(GLuint cnt, ...);
 void shaderLog(GLuint shader);
 void programLog(GLuint program);
 

@@ -1,18 +1,21 @@
 #include "render.h"
 #include "window.h"
 #include "shader.h"
+#include "vbo.h"
+#include "vao.h"
+#include "time.h"
 
-static void processInput(GLFWwindow* window, body *body){
+static void processInput(GLFWwindow* window, body *body, double deltaTime){
   if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, 1);
   if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    body->velocity.x += -0.0002f;
+    body->velocity.x += -ACCELERATION * deltaTime;
   if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    body->velocity.x += 0.0002f;
+    body->velocity.x += ACCELERATION * deltaTime;
   if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    body->velocity.y += 0.0002f;
+    body->velocity.y += ACCELERATION * 2.0f * deltaTime;
   if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    body->velocity.y += -0.0002f;
+    body->velocity.y += -ACCELERATION * deltaTime;
 }
 
 float deltaTime = 0.0f;
@@ -24,101 +27,45 @@ int main(void){
   memset(&ball, 0, sizeof(ball));
 
   ball.radius = 0.1f;
-  ball.velocity.x = 10.0f;
+  ball.velocity.x = 0.5f;
   makeCircle(&ball);
 
-  const char *vertexShaderSource = readShader("res/shaders/basic.vs");
-  const char *fragmentShaderSource = readShader("res/shaders/basic.fs");
+  GLuint vertexShader = createShader(GL_VERTEX_SHADER, "res/shaders/basic.vs");
+  GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, "res/shaders/basic.fs");
+  GLuint shaderProgram = createProgram(2, vertexShader, fragmentShader);
 
-  uint32_t vertexShader;
-  vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glCompileShader(vertexShader);
+  struct VBO vbo = createVBO(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+  bufferVBO(vbo, ball.vertices, sizeof(ball.vertices));
 
-  shaderLog(vertexShader);
-
-  uint32_t fragmentShader;
-  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-  glCompileShader(fragmentShader);
-
-  shaderLog(fragmentShader);
-
-  uint32_t shaderProgram;
-  shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
-
-  programLog(shaderProgram);
-
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
-
-  /* cast it to non const *
-     glShaderSource needs const char *
-  */
-  free((void *)vertexShaderSource);
-  free((void *)fragmentShaderSource);
-
-  uint32_t VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-
-  uint32_t VBO;
-  glGenBuffers(1, &VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex) * NOFT * 3, ball.vertices, GL_STATIC_DRAW);
-
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
-
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  struct VAO vao = createVAO();
+  attribVAO(vao, vbo, 0, 3, GL_FLOAT, sizeof(vertex), 0);
+  attribVAO(vao, vbo, 1, 3, GL_FLOAT, sizeof(vertex), sizeof(vec3));
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-
-  float lastFrame = 0.0f;
-  float curFrame = 0.0f;
-  float deltaTime = 0.0f;
-
+  struct time deltaTime = initDeltaTime();
   while(!glfwWindowShouldClose(window)){
 
-    curFrame = glfwGetTime();
-    deltaTime = curFrame - lastFrame;
-    lastFrame = curFrame;
-
-    processInput(window, &ball);
+    getDeltaTime(&deltaTime);
+    processInput(window, &ball, deltaTime.deltaTime);
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, NOFT * 3);
-    glBindVertexArray(0);
 
-    moveBodyVelocity(&ball, deltaTime);
+    moveBodyVelocity(&ball, deltaTime.deltaTime);
     makeCircle(&ball);
 
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex) * NOFT * 3, ball.vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    deltaTime = 0.0f;
-
+    bufferVBO(vbo, ball.vertices, sizeof(ball.vertices));
 
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
 
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
+  deleteVAO(vao);
+  deleteVBO(vbo);
   glDeleteProgram(shaderProgram);
 
   glfwTerminate();

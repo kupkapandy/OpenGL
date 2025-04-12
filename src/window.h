@@ -3,8 +3,8 @@
 
 #include "util/util.h"
 
-#define WIDTH 1400
-#define HEIGHT 1400
+#define WIDTH 600
+#define HEIGHT 600
 
 #define TITLE "Learn OpenGL"
 

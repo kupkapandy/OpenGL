@@ -4,7 +4,7 @@
 #include "util/util.h"
 
 #define NOFT 1440
-#define ACCELERATION 0.0098067f
+#define ACCELERATION 0.98067 * 2.5
 
 typedef struct vertex_t{
   vec3 pos;
@@ -22,7 +22,7 @@ typedef struct body_t{
 } body;
 
 void makeCircle(body *circle);
-void moveBodyVelocity(body *circle, float deltaTime);
-void accelerateBody(body *circle, float acceleration);
+void moveBodyVelocity(body *circle, double deltaTime);
+void accelerateBody(body *circle, double acceleration);
 
 #endif

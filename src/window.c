@@ -20,6 +20,7 @@ GLFWwindow *initWindow(void){
   }
 
   glfwMakeContextCurrent(window);
+  glfwSwapInterval(0); //vsync
 
   if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
     fprintf(stderr, "Failed to initialize GLAD\n");

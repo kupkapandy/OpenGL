@@ -46,43 +46,43 @@ void makeCircle(body *circle){
   }
 }
 
-void accelerateBody(body *circle, float acceleration){
+void accelerateBody(body *circle, double acceleration){
   if(!circle->onGround)
     circle->velocity.y += acceleration;
 }
 
-void moveBodyVelocity(body *circle, float deltaTime){
+void moveBodyVelocity(body *circle, double deltaTime){
   accelerateBody(circle, -ACCELERATION * deltaTime);
 
-  if(circle->pos.y - circle->radius + circle->velocity.y < -1){
+  if(circle->pos.y - circle->radius + circle->velocity.y * deltaTime < -1){
     circle->pos.y = circle->radius - 1;
-    circle->velocity.y *= -0.8f;
+    circle->velocity.y *= -0.6f;
   }else{
-    circle->pos.y += circle->velocity.y;
+    circle->pos.y += circle->velocity.y * deltaTime;
   }
 
-  if(circle->pos.y + circle->radius + circle->velocity.y > 1){
+  if(circle->pos.y + circle->radius + circle->velocity.y * deltaTime > 1){
     circle->pos.y = 1 - circle->radius;
-    circle->velocity.y *= -0.8f;
+    circle->velocity.y *= -0.6f;
   }else{
-    circle->pos.y += circle->velocity.y;
+    circle->pos.y += circle->velocity.y * deltaTime;
   }
 
-  if(circle->pos.x - circle->radius + circle->velocity.x < -1){
+  if(circle->pos.x - circle->radius + circle->velocity.x * deltaTime < -1){
     circle->pos.x = circle->radius - 1;
     circle->velocity.x *= -0.45f;
   }else{
-    circle->pos.x += circle->velocity.x;
+    circle->pos.x += circle->velocity.x * deltaTime;
   }
 
-  if(circle->pos.x + circle->radius + circle->velocity.x > 1){
+  if(circle->pos.x + circle->radius + circle->velocity.x * deltaTime > 1){
     circle->pos.x = 1 - circle->radius;
     circle->velocity.x *= -0.45f;
   }else{
-    circle->pos.x += circle->velocity.x;
+    circle->pos.x += circle->velocity.x * deltaTime;
   }
 
-  printf("%.8f %.8f | %.8f %.8f | %1d\n", circle->pos.x, circle->pos.y, circle->velocity.x, circle->velocity.y, circle->onGround);
+  //printf("%.8f %.8f | %.8f %.8f | %1d\n", circle->pos.x, circle->pos.y, circle->velocity.x, circle->velocity.y, circle->onGround);
 
 }
 
