@@ -2,9 +2,17 @@
 #include "window.h"
 #include "shader.h"
 
-static void processInput(GLFWwindow* window){
+static void processInput(GLFWwindow* window, body *body){
   if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, 1);
+  if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    body->velocity.x += -0.0002f;
+  if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    body->velocity.x += 0.0002f;
+  if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    body->velocity.y += 0.0002f;
+  if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    body->velocity.y += -0.0002f;
 }
 
 float deltaTime = 0.0f;
@@ -84,7 +92,7 @@ int main(void){
     deltaTime = curFrame - lastFrame;
     lastFrame = curFrame;
 
-    processInput(window);
+    processInput(window, &ball);
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);

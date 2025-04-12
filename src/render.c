@@ -70,14 +70,14 @@ void moveBodyVelocity(body *circle, float deltaTime){
 
   if(circle->pos.x - circle->radius + circle->velocity.x < -1){
     circle->pos.x = circle->radius - 1;
-    circle->velocity.x *= -0.65f;
+    circle->velocity.x *= -0.45f;
   }else{
     circle->pos.x += circle->velocity.x;
   }
 
   if(circle->pos.x + circle->radius + circle->velocity.x > 1){
     circle->pos.x = 1 - circle->radius;
-    circle->velocity.x *= -0.65f;
+    circle->velocity.x *= -0.45f;
   }else{
     circle->pos.x += circle->velocity.x;
   }

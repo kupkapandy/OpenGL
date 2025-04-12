@@ -13,7 +13,7 @@ GLFWwindow *initWindow(void){
 
   GLFWwindow *window;
 
-  if((window = glfwCreateWindow(800, 600, "Learn OpenGL", NULL, NULL)) == NULL){
+  if((window = glfwCreateWindow(WIDTH, HEIGHT, "Learn OpenGL", NULL, NULL)) == NULL){
     fprintf(stderr, "Failed to create GLFW window\n");
     glfwTerminate();
     exit(1);
