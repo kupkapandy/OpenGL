@@ -20,12 +20,15 @@ GLFWwindow *initWindow(void){
   }
 
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(0); //vsync
+  glfwSwapInterval(0);
 
   if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
     fprintf(stderr, "Failed to initialize GLAD\n");
     exit(1);
   }
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glEnable(GL_DEPTH_TEST);
   return window;
 }

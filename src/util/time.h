@@ -1,7 +1,7 @@
 #ifndef TIME_H
 #define TIME_H
 
-#include "util/util.h"
+#include "../util/util.h"
 
 struct time {
   double deltaTime;

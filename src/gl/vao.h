@@ -1,7 +1,6 @@
 #ifndef VAO_H
 #define VAO_H
 
-#include "util/util.h"
 #include "vbo.h"
 
 struct VAO {

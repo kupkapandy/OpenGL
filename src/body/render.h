@@ -1,9 +1,9 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include "util/util.h"
+#include "../util/util.h"
 
-#define NOFT 1440
+#define NOFV 36
 #define ACCELERATION 0.98067 * 2.5
 
 typedef struct vertex_t{
@@ -12,7 +12,8 @@ typedef struct vertex_t{
 } vertex;
 
 typedef struct body_t{
-  vertex vertices[NOFT * 3];
+  vertex vertices[NOFV];
+  vec3 indices[NOFV / 3];
 
   vec3 pos;
   vec3 velocity;
@@ -22,6 +23,7 @@ typedef struct body_t{
 } body;
 
 void makeCircle(body *circle);
+void makeCube(body *cube, float len);
 void moveBodyVelocity(body *circle, double deltaTime);
 void accelerateBody(body *circle, double acceleration);
 

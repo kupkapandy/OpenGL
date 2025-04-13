@@ -58,6 +58,10 @@ GLuint createProgram(GLuint cnt, ...){
   return shaderProgram;
 }
 
+void deleteProgram(GLuint shaderProgram){
+  glDeleteProgram(shaderProgram);
+}
+
 
 void shaderLog(GLuint shader){
   int success;
