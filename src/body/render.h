@@ -3,28 +3,30 @@
 
 #include "../util/util.h"
 
-#define NOFV 36
+#define NOFV 8
 #define ACCELERATION 0.98067 * 2.5
 
 typedef struct vertex_t{
   vec3 pos;
   vec3 color;
+  vec2 texture;
 } vertex;
 
-typedef struct body_t{
+struct body{
   vertex vertices[NOFV];
-  vec3 indices[NOFV / 3];
+  uint32_t indices[36];
 
   vec3 pos;
   vec3 velocity;
 
   float radius;
   bool onGround;
-} body;
+} ;
 
-void makeCircle(body *circle);
-void makeCube(body *cube, float len);
-void moveBodyVelocity(body *circle, double deltaTime);
-void accelerateBody(body *circle, double acceleration);
+struct body initBody(float zoffset);
+void makeCircle(struct body *circle);
+void makeCube(struct body *cube, float len, float zoffset);
+void moveBodyVelocity(struct body *circle, double deltaTime);
+void accelerateBody(struct body *circle, double acceleration);
 
 #endif

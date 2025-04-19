@@ -7,11 +7,16 @@ struct VBO createVBO(GLenum type, GLenum usage){
   };
 
   glGenBuffers(1, &vbo.handle);
+  glBindBuffer(vbo.type, vbo.handle);
   return vbo;
 }
 
 void bindVBO(struct VBO vbo){
   glBindBuffer(vbo.type, vbo.handle);
+}
+
+void unbindVBO(struct VBO vbo){
+  glBindBuffer(vbo.type, 0);
 }
 
 void bufferVBO(struct VBO vbo, void *data, size_t cnt){

@@ -2,7 +2,7 @@ CC = gcc
 CCFLAGS = -Wall -Wextra -Wpedantic -g -Wfloat-equal -fno-strict-aliasing
 CCFLAGS += -Wno-pointer-arith -Wno-unused-parameter
 CCFLAGS += -O2 -g
-CCFLAGS += -Ilib/cglm/include -Ilib/glad/include -Ilib/glfw/include
+CCFLAGS += -Ilib/cglm/include -Ilib/glad/include -Ilib/glfw/include -Ilib/stb
 LDFLAGS = lib/glad/src/glad.o lib/cglm/libcglm.a lib/glfw/src/libglfw3.a -lm -ldl -lpthread
 
 SRC = $(wildcard src/*.c) $(wildcard src/**/*.c) $(wildcard src/**/**/*.c)

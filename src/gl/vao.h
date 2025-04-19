@@ -9,6 +9,7 @@ struct VAO {
 
 struct VAO createVAO(void);
 void bindVAO(struct VAO vao);
+void unbindVAO(void);
 void attribVAO(struct VAO vao, struct VBO vbo, GLuint idx, GLuint size,
                GLenum type, GLsizei stride, size_t offset);
 void deleteVAO(struct VAO vao);
