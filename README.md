@@ -9,7 +9,7 @@ The project uses **Make**, as it's build system. To clone the repo use:
 `$ git clone https://github.com/kupkapandy/voxel-engine.git -j4 --recurse-submodules`\
 `$ make`
 
-Also, be sure to the executable file (`$ ./bin/game`) from the root dir of the repo, or use
+Also, be sure to run the executable file (`$ ./bin/game`) from the root dir of the repo, or use
 
 `$ make run -j4`\
 `$ make clean && make run -j4`\
