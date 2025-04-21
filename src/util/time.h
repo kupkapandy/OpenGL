@@ -2,16 +2,9 @@
 #define TIME_H
 
 #include "../util/util.h"
+#include "../gfx/window.h"
 
-struct time {
-  double deltaTime;
-  double curFrame;
-  double lastFrame;
-  double lastFrameSecond;
-  uint32_t fps;
-};
-
-struct time initDeltaTime(void);
-void getDeltaTime(struct time *state);
+void initTime();
+void getDeltaTime();
 
 #endif

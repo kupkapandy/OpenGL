@@ -4,7 +4,7 @@
 #include "../util/util.h"
 
 GLuint createShader(GLenum type, const char *path);
-GLuint createProgram(GLuint cnt, ...);
+void createProgram(GLuint *shaderProgram, GLuint cnt, ...);
 void deleteProgram(GLuint shaderProgram);
 void shaderLog(GLuint shader);
 void programLog(GLuint program);

@@ -1,108 +1,104 @@
 #include "body/render.h"
-#include "gfx/window.h"
+#include "block/block.h"
 #include "gfx/shader.h"
-#include "gfx/vao.h"
 #include "gfx/texture.h"
-#include "gfx/camera.h"
 #include "util/time.h"
 
-static void processInput(GLFWwindow* window, struct camera *cam, double deltaTime){
-  if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, 1);
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-    vec3 tmp;
-    glm_vec3_scale(cam->camFront, camSpeed * deltaTime, tmp);
-    glm_vec3_add(cam->camPos, tmp, cam->camPos);
+struct global global;
+struct renderer renderer;
+struct cube cube;
 
-  }
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+static void processInput(void){
+  if(glfwGetKey(global.window.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    glfwSetWindowShouldClose(global.window.window, 1);
+  if (glfwGetKey(global.window.window, GLFW_KEY_W) == GLFW_PRESS){
     vec3 tmp;
-    glm_vec3_scale(cam->camFront, camSpeed * deltaTime, tmp);
-    glm_vec3_sub(cam->camPos, tmp, cam->camPos);
-
+    glm_vec3_scale(renderer.cam.camFront, camSpeed * global.window.deltaTime, tmp);
+    glm_vec3_add(renderer.cam.camPos, tmp, renderer.cam.camPos);
   }
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+  if (glfwGetKey(global.window.window, GLFW_KEY_S) == GLFW_PRESS){
     vec3 tmp;
-    glm_cross(cam->camFront, cam->camUp, tmp);
+    glm_vec3_scale(renderer.cam.camFront, camSpeed * global.window.deltaTime, tmp);
+    glm_vec3_sub(renderer.cam.camPos, tmp, renderer.cam.camPos);
+  }
+  if (glfwGetKey(global.window.window, GLFW_KEY_A) == GLFW_PRESS){
+    vec3 tmp;
+    glm_cross(renderer.cam.camFront, renderer.cam.camUp, tmp);
     glm_normalize(tmp);
 
-    glm_vec3_mulsubs(tmp, camSpeed * deltaTime, cam->camPos);
+    glm_vec3_mulsubs(tmp, camSpeed * global.window.deltaTime, renderer.cam.camPos);
   }
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+  if (glfwGetKey(global.window.window, GLFW_KEY_D) == GLFW_PRESS){
     vec3 tmp;
-    glm_cross(cam->camFront, cam->camUp, tmp);
+    glm_cross(renderer.cam.camFront, renderer.cam.camUp, tmp);
     glm_normalize(tmp);
 
-    glm_vec3_muladds(tmp, camSpeed * deltaTime, cam->camPos);
+    glm_vec3_muladds(tmp, camSpeed * global.window.deltaTime, renderer.cam.camPos);
   }
 }
 
-extern struct camera cam;
-
-float deltaTime = 0.0f;
-
-int main(void){
-  GLFWwindow *window = initWindow();
-
-  struct cube cube = initBody(4.0f);
+void init(void){
+  initBody(4.0f);
+  initCam();
+  initTime();
+  initWindow();
 
   GLuint vertexShader = createShader(GL_VERTEX_SHADER, "res/shaders/basic.vs");
   GLuint fragmentShader = createShader(GL_FRAGMENT_SHADER, "res/shaders/basic.fs");
-  GLuint shaderProgram = createProgram(2, vertexShader, fragmentShader);
+  createProgram(&renderer.program, 2, vertexShader, fragmentShader);
+
+  createVAO(&renderer.vao);
+  createVBO(&renderer.vbo, GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+  createVBO(&renderer.ebo, GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 
   loadImage("res/images/texture.png");
 
-  struct VAO vao = createVAO();
-  struct VBO vbo = createVBO(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-  struct VBO ebo = createVBO(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
+  bufferVBO(renderer.vbo, cube.vertices, sizeof(cube.vertices));
+  bufferVBO(renderer.ebo, cube.indices, sizeof(cube.indices));
+  attribVAO(renderer.vao, renderer.vbo, 0, 3, GL_FLOAT, sizeof(vertex), 0);
+  attribVAO(renderer.vao, renderer.vbo, 1, 2, GL_FLOAT, sizeof(vertex), sizeof(vec3));
+}
 
-  bufferVBO(vbo, cube.vertices, sizeof(cube.vertices));
-  bufferVBO(ebo, cube.indices, sizeof(cube.indices));
-  attribVAO(vao, vbo, 0, 3, GL_FLOAT, sizeof(vertex), 0);
-  attribVAO(vao, vbo, 1, 2, GL_FLOAT, sizeof(vertex), sizeof(vec3));
+void update(void){
 
-  mat4 model;
+}
+
+void renderLoop(void){
+  mat4 model, proj, view;
+
   glm_mat4_identity(model);
-
-  mat4 view;
   glm_mat4_identity(view);
-  glm_translate(view, (vec3){0.0f, 0.0f, -3.0f});
-
-  mat4 proj;
   glm_mat4_identity(proj);
-  glm_perspective(glm_rad(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f, proj);
 
-  int modelLoc = glGetUniformLocation(shaderProgram, "model");
-  int viewLoc = glGetUniformLocation(shaderProgram, "view");
-  int projLoc = glGetUniformLocation(shaderProgram, "proj");
+  glm_translate(view, (vec3){0.0f, 0.0f, -3.0f});
+  glm_perspective(glm_rad(45.0f), (float)global.window.width / (float)global.window.height, 0.1f, 1000.0f, proj);
 
-  const float radius = 1.0f;
-  struct time deltaTime = initDeltaTime();
-  while(!glfwWindowShouldClose(window)){
+  int modelLoc = glGetUniformLocation(renderer.program, "model");
+  int viewLoc = glGetUniformLocation(renderer.program, "view");
+  int projLoc = glGetUniformLocation(renderer.program, "proj");
+
+  while(!glfwWindowShouldClose(global.window.window)){
     //glm_rotate_at(model, (vec3){0.0f, 0.0f, -2.0f}, glm_rad(180.0f) * deltaTime.deltaTime, (vec3){0.5f, 1.0f, 0.0f});
-
-    float camX = sin(glfwGetTime()) * radius;
-    float camZ = cos(glfwGetTime()) * radius;
 
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (const float *)model);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, (const float *)proj);
 
-    getDeltaTime(&deltaTime);
-    processInput(window, &cam, deltaTime.deltaTime);
+    getDeltaTime(&global.window);
+    processInput();
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glUseProgram(shaderProgram);
-    glBindVertexArray(vao.handle);
+    glUseProgram(renderer.program);
+    glBindVertexArray(renderer.vao.handle);
 
     for(int i = 0; i < 64; ++i){
       for(int j = 0; j < 64; ++j){
         for(int k = 0; k < 64; ++k){
           glm_mat4_identity(view);
           vec3 tmp;
-          glm_vec3_add(cam.camPos, cam.camFront, tmp);
-          glm_lookat(cam.camPos, tmp, cam.camUp, view);
+          glm_vec3_add(renderer.cam.camPos, renderer.cam.camFront, tmp);
+          glm_lookat(renderer.cam.camPos, tmp, renderer.cam.camUp, view);
           glm_translate(view, (vec3){-i * 2, -j * 2, -k * 2 + -20.0f});
 
           glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (const float *)view);
@@ -111,17 +107,26 @@ int main(void){
       }
     }
 
-    bufferVBO(vbo, cube.vertices, sizeof(cube.vertices));
+    bufferVBO(renderer.vbo, cube.vertices, sizeof(cube.vertices));
 
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(global.window.window);
     glfwPollEvents();
   }
+}
 
-  deleteVAO(vao);
-  deleteVBO(vbo);
-  deleteVBO(ebo);
-  deleteProgram(shaderProgram);
+void delete(void){
+  deleteVAO(renderer.vao);
+  deleteVBO(renderer.vbo);
+  deleteVBO(renderer.ebo);
+  deleteProgram(renderer.program);
 
   glfwTerminate();
+}
+
+int main(void){
+  init();
+  renderLoop();
+  delete();
   return 0;
 }
+

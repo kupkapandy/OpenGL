@@ -7,7 +7,7 @@
 #define startPos {0.0f, 0.0f, 3.0f}
 #define origin (vec3){0.0f, 0.0f, 0.0f}
 
-struct camera {
+struct Camera {
   vec3 camPos;
   vec3 camFront;
   vec3 camRight;
@@ -18,6 +18,6 @@ struct camera {
   float pitch;
 };
 
-struct camera camInit();
+void initCam(void);
 
 #endif

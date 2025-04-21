@@ -2,40 +2,31 @@
 #define RENDER_H
 
 #include "../block/block.h"
+#include "../gfx/window.h"
+#include "../gfx/camera.h"
+#include "../gfx/vao.h"
 
 #define ACCELERATION 0.98067 * 2.5
 
-
-struct global_t {
-  struct window_t {
-    GLFWwindow *window;
-    uint32_t WIDTH;
-    uint32_t HEIGHT;
-  } window;
-
-  struct cam_t {
-    vec3 camPos;
-    vec3 camFront;
-    vec3 camRight;
-    vec3 camUp;
-    vec3 dir;
-
-    float yaw;
-    float pitch;
-  } cam;
-
-
-  struct time_t {
-    double deltaTime;
-    double curFrame;
-    double lastFrame;
-    double lastFrameSum;
-    uint32_t fps;
-  } time;
+struct global {
+  struct Window window;
 };
 
-struct cube initBody(float zoffset);
-void makeCube(struct cube *cube, float zoffset);
-void applyTextureCube(struct cube *cube, uint8_t atlasIdx);
+struct renderer {
+  struct Camera cam;
+
+  struct VAO vao;
+  struct VBO vbo, ebo;
+
+  GLuint program;
+};
+
+// make it global
+extern struct global global;
+extern struct renderer renderer;
+
+void initBody(float zoffset);
+void makeCube(float zoffset);
+void applyTextureCube(uint8_t atlasIdx);
 
 #endif

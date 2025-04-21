@@ -40,22 +40,21 @@ GLuint createShader(GLenum type, const char *path){
   return shader;
 }
 
-GLuint createProgram(GLuint cnt, ...){
+void createProgram(GLuint *shaderProgram, GLuint cnt, ...){
   va_list va_ptr;
   va_start(va_ptr, cnt);
 
-  GLuint shaderProgram = glCreateProgram();
+  *shaderProgram = glCreateProgram();
   for(GLuint i = 0; i < cnt; ++i){
     GLuint shader = va_arg(va_ptr, GLuint);
-    glAttachShader(shaderProgram, shader);
+    glAttachShader(*shaderProgram, shader);
     glDeleteShader(shader);
   }
 
-  glLinkProgram(shaderProgram);
-  programLog(shaderProgram);
+  glLinkProgram(*shaderProgram);
+  programLog(*shaderProgram);
 
   va_end(va_ptr);
-  return shaderProgram;
 }
 
 void deleteProgram(GLuint shaderProgram){

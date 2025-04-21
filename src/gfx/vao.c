@@ -1,10 +1,8 @@
 #include "vao.h"
 
-struct VAO createVAO(void){
-  struct VAO vao;
-  glGenVertexArrays(1, &vao.handle);
-  bindVAO(vao);
-  return vao;
+void createVAO(struct VAO *vao){
+  glGenVertexArrays(1, &vao->handle);
+  bindVAO(*vao);
 }
 
 void bindVAO(struct VAO vao){

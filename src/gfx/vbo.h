@@ -9,7 +9,7 @@ struct VBO {
   GLenum usage;
 };
 
-struct VBO createVBO(GLenum type, GLenum usage);
+void createVBO(struct VBO *vbo, GLenum type, GLenum usage);
 void bindVBO(struct VBO vbo);
 void unbindVBO(struct VBO vbo);
 void bufferVBO(struct VBO vbo, void *data, size_t cnt);

@@ -1,14 +1,11 @@
 #include "vbo.h"
 
-struct VBO createVBO(GLenum type, GLenum usage){
-  struct VBO vbo = {
-    .type = type,
-    .usage = usage,
-  };
+void createVBO(struct VBO *vbo, GLenum type, GLenum usage){
+  vbo->type = type;
+  vbo->usage = usage;
 
-  glGenBuffers(1, &vbo.handle);
-  glBindBuffer(vbo.type, vbo.handle);
-  return vbo;
+  glGenBuffers(1, &vbo->handle);
+  glBindBuffer(vbo->type, vbo->handle);
 }
 
 void bindVBO(struct VBO vbo){

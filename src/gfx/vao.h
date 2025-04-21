@@ -7,7 +7,7 @@ struct VAO {
   GLuint handle;
 };
 
-struct VAO createVAO(void);
+void createVAO(struct VAO *vao);
 void bindVAO(struct VAO vao);
 void unbindVAO(void);
 void attribVAO(struct VAO vao, struct VBO vbo, GLuint idx, GLuint size,

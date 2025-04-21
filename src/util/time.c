@@ -1,33 +1,29 @@
 #include "time.h"
+#include "../body/render.h"
 
-struct time initDeltaTime(void){
-  struct time state;
+void initTime(struct Window *window){
+  global.window.deltaTime = 0.0f;
 
-  state.curFrame = 0.0f;
-  state.lastFrame = 0.0f;
-  state.lastFrameSecond = 0.0f;
+  global.window.curFrame = 0.0f;
+  global.window.lastFrame = 0.0f;
+  global.window.lastFrameSecond = 0.0f;
 
-  state.deltaTime = 0.0f;
-  state.fps = 0.0f;
-
-  return state;
+  global.window.fps = 0.0f;
 }
 
-void getDeltaTime(struct time *state){
-  static float fps = 0.0f;
+void getDeltaTime(struct Window *window){
+  global.window.curFrame = glfwGetTime();
+  global.window.deltaTime = global.window.curFrame - global.window.lastFrame;
+  global.window.lastFrame = global.window.curFrame;
 
-  state->curFrame = glfwGetTime();
-  state->deltaTime = state->curFrame - state->lastFrame;
-  state->lastFrame = state->curFrame;
+  global.window.fps++;
 
-  ++fps;
+  if(global.window.curFrame - global.window.lastFrameSecond >= 1.0f){
+    global.window.lastFrameSecond = global.window.curFrame;
+    global.window.fps = global.window.fps;
 
-  if(state->curFrame - state->lastFrameSecond >= 1.0f){
-    state->lastFrameSecond = state->curFrame;
-    state->fps = (int)fps;
 
-    fps = 0.0f;
-
-    printf("FPS: %d %f\n", state->fps, state->deltaTime);
+    printf("FPS: %d %f\n", global.window.fps, global.window.deltaTime);
+    global.window.fps = 0.0f;
   }
 }

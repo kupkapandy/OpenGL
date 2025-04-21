@@ -1,19 +1,20 @@
 #include "camera.h"
+#include "../body/render.h"
 
-struct camera cam = {
-  .camPos = {0.0f, 0.0f, 3.0f},
-  .camFront = {0.0f, 0.0f, -1.0f},
-  .camRight = {1.0f, 0.0f, 0.0f},
-  .camUp = {0.0f, 1.0f, 0.0f},
+void initCam(void){
+  renderer.cam = (struct Camera){
+    .yaw = -90.0f,
+    .pitch = 0.0f,
 
-  .yaw = -90.0f,
-  .pitch = 0.0f,
-};
+    .camPos = {0.0f, 0.0f, 3.0f},
+    .camRight = {1.0f, 0.0f, 0.0f},
+    .camUp = {0.0f, 1.0f, 0.0f},
+    .camFront = {
+      cos(glm_rad(-90.0f)) * cos(glm_rad(0.0f)),
+      sin(glm_rad(0.0f)),
+      sin(glm_rad(-90.0f)) * cos(glm_rad(0.0f)),
+    },
+  };
 
-struct camera camInit(){
-  cam.camFront[0] = cos(glm_rad(cam.yaw)) * cos(glm_rad(cam.pitch));
-  cam.camFront[1] = sin(glm_rad(cam.pitch));
-  cam.camFront[2] = sin(glm_rad(cam.yaw)) * cos(glm_rad(cam.pitch));
-
-  return cam;
+  glm_normalize(renderer.cam.camFront);
 }

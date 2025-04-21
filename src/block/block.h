@@ -33,4 +33,6 @@ struct cube {
   uint8_t atlasIdx;
 };
 
+extern struct cube cube;
+
 #endif
