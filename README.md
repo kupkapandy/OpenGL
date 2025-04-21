@@ -7,11 +7,15 @@ Being created for the purpose of learning OpenGL, and math behind 3D graphics
 The project uses **Make**, as it's build system. To clone the repo use:
 
 `$ git clone https://github.com/kupkapandy/voxel-engine.git -j4 --recurse-submodules`
+
 `$ make`
 
 Also, be sure to the executable file (`$ ./bin/game`) from the root dir of the repo, or use
+
 `$ make run -j4`
+
 or
+
 `$ make clean && make run -j4`
 
 ### Design and Implementation
