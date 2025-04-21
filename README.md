@@ -16,7 +16,7 @@ Also, be sure to run the executable file (`$ ./bin/game`) from the root dir of t
 
 ## TODO
 - Refactor the whole thing;
-- Change the rendering of cubes, so only render the faces the user can see;
+- Change the rendering of cubes, so render only the faces that the user can see;
 
 ## Design and Implementation
 
