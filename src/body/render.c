@@ -1,157 +1,173 @@
 #include "render.h"
 
-struct body initBody(float zoffset){
-  struct body body;
+struct cube initBody(float zoffset){
+  struct cube body;
   memset(&body, 0, sizeof(body));
-  makeCube(&body, 0.3f, -zoffset);
+  makeCube(&body, -zoffset);
+  applyTextureCube(&body, 90);
 
   return body;
 }
 
-void makeCircle(struct body *circle){
-  float rot = radians(360.0f / NOFV * 3);
-  vec3 v1 = {0, circle->radius, 0.0f};
-  vec3 v2 = {-circle->radius * sin(rot), circle->radius * cos(rot), 0.0f};
+void makeCube(struct cube *cube, float zoffset){
+  // front
+  cube->vertices[0].pos[0] = -1.0f;
+  cube->vertices[0].pos[1] = -1.0f;
+  cube->vertices[0].pos[2] = 1.0f + zoffset;
+  cube->vertices[1].pos[0] = 1.0f;
+  cube->vertices[1].pos[1] = -1.0f;
+  cube->vertices[1].pos[2] = 1.0f + zoffset;
+  cube->vertices[2].pos[0] = 1.0f;
+  cube->vertices[2].pos[1] = 1.0f;
+  cube->vertices[2].pos[2] = 1.0f + zoffset;
+  cube->vertices[3].pos[0] = -1.0f;
+  cube->vertices[3].pos[1] = 1.0f;
+  cube->vertices[3].pos[2] = 1.0f + zoffset;
 
-  for(int i = 0; i < NOFV / 3; ++i){
-    float angle = (float)i / (NOFV / 3.0f) * -2.0f * M_PI;
+  // back
+  cube->vertices[4].pos[0] = -1.0f;
+  cube->vertices[4].pos[1] = -1.0f;
+  cube->vertices[4].pos[2] = -1.0f + zoffset;
+  cube->vertices[5].pos[0] = 1.0f;
+  cube->vertices[5].pos[1] = -1.0f;
+  cube->vertices[5].pos[2] = -1.0f + zoffset;
+  cube->vertices[6].pos[0] = 1.0f;
+  cube->vertices[6].pos[1] = 1.0f;
+  cube->vertices[6].pos[2] = -1.0f + zoffset;
+  cube->vertices[7].pos[0] = -1.0f;
+  cube->vertices[7].pos[1] = 1.0f;
+  cube->vertices[7].pos[2] = -1.0f + zoffset;
 
-    circle->vertices[i * 3].pos[0] = circle->pos[0];
-    circle->vertices[i * 3].pos[1] = circle->pos[1];
-    circle->vertices[i * 3].pos[2] = circle->pos[2];
+  // left
+  cube->vertices[8].pos[0] = -1.0f;
+  cube->vertices[8].pos[1] = -1.0f;
+  cube->vertices[8].pos[2] = 1.0f + zoffset;
+  cube->vertices[9].pos[0] = -1.0f;
+  cube->vertices[9].pos[1] = -1.0f;
+  cube->vertices[9].pos[2] = -1.0f + zoffset;
+  cube->vertices[10].pos[0] = -1.0f;
+  cube->vertices[10].pos[1] = 1.0f;
+  cube->vertices[10].pos[2] = -1.0f + zoffset;
+  cube->vertices[11].pos[0] = -1.0f;
+  cube->vertices[11].pos[1] = 1.0f;
+  cube->vertices[11].pos[2] = 1.0f + zoffset;
 
-    circle->vertices[i * 3 + 1].pos[0] = v1[0] + circle->pos[0];
-    circle->vertices[i * 3 + 1].pos[1] = v1[1] + circle->pos[1];
-    circle->vertices[i * 3 + 1].pos[2] = v1[2] + circle->pos[2];
+  // right
+  cube->vertices[12].pos[0] = 1.0f;
+  cube->vertices[12].pos[1] = -1.0f;
+  cube->vertices[12].pos[2] = 1.0f + zoffset;
+  cube->vertices[13].pos[0] = 1.0f;
+  cube->vertices[13].pos[1] = -1.0f;
+  cube->vertices[13].pos[2] = -1.0f + zoffset;
+  cube->vertices[14].pos[0] = 1.0f;
+  cube->vertices[14].pos[1] = 1.0f;
+  cube->vertices[14].pos[2] = -1.0f + zoffset;
+  cube->vertices[15].pos[0] = 1.0f;
+  cube->vertices[15].pos[1] = 1.0f;
+  cube->vertices[15].pos[2] = 1.0f + zoffset;
 
-    circle->vertices[i * 3 + 2].pos[0] = v2[0] + circle->pos[0];
-    circle->vertices[i * 3 + 2].pos[1] = v2[1] + circle->pos[1];
-    circle->vertices[i * 3 + 2].pos[2] = v2[2] + circle->pos[2];
+  // up
+  cube->vertices[16].pos[0] = -1.0f;
+  cube->vertices[16].pos[1] = 1.0f;
+  cube->vertices[16].pos[2] = 1.0f + zoffset;
+  cube->vertices[17].pos[0] = 1.0f;
+  cube->vertices[17].pos[1] = 1.0f;
+  cube->vertices[17].pos[2] = 1.0f + zoffset;
+  cube->vertices[18].pos[0] = 1.0f;
+  cube->vertices[18].pos[1] = 1.0f;
+  cube->vertices[18].pos[2] = -1.0f + zoffset;
+  cube->vertices[19].pos[0] = -1.0f;
+  cube->vertices[19].pos[1] = 1.0f;
+  cube->vertices[19].pos[2] = -1.0f + zoffset;
 
-    float rVal = sin(angle) * 0.5f + 0.5f;
-    float gVal = sin(angle + 2.0f) * 0.5f + 0.5f;
-    float bVal = sin(angle + 4.0f) * 0.5f + 0.5f;
+  // down
+  cube->vertices[20].pos[0] = -1.0f;
+  cube->vertices[20].pos[1] = -1.0f;
+  cube->vertices[20].pos[2] = 1.0f + zoffset;
+  cube->vertices[21].pos[0] = 1.0f;
+  cube->vertices[21].pos[1] = -1.0f;
+  cube->vertices[21].pos[2] = 1.0f + zoffset;
+  cube->vertices[22].pos[0] = 1.0f;
+  cube->vertices[22].pos[1] = -1.0f;
+  cube->vertices[22].pos[2] = -1.0f + zoffset;
+  cube->vertices[23].pos[0] = -1.0f;
+  cube->vertices[23].pos[1] = -1.0f;
+  cube->vertices[23].pos[2] = -1.0f + zoffset;
 
-    circle->vertices[i * 3 + 0].color[0] = 0.5f;
-    circle->vertices[i * 3 + 0].color[1] = 0.5f;
-    circle->vertices[i * 3 + 0].color[2] = 0.5f;
-
-    circle->vertices[i * 3 + 1].color[0] = rVal;
-    circle->vertices[i * 3 + 1].color[1] = gVal;
-    circle->vertices[i * 3 + 1].color[2] = bVal;
-
-    circle->vertices[i * 3 + 2].color[0] = rVal;
-    circle->vertices[i * 3 + 2].color[1] = gVal;
-    circle->vertices[i * 3 + 2].color[2] = bVal;
-
-    float x = v1[0];
-    float y = v1[1];
-
-    v1[0] = (x * cos(rot) - y * sin(rot));
-    v1[1] = (x * sin(rot) + y * cos(rot));
-
-    x = v2[0];
-    y = v2[1];
-
-    v2[0] = (x * cos(rot) - y * sin(rot));
-    v2[1] = (x * sin(rot) + y * cos(rot));
+  for(int i = 0; i < 6; ++i){
+    cube->indices[i * 6] = i * 4;
+    cube->indices[i * 6 + 1] = i * 4 + 1;
+    cube->indices[i * 6 + 2] = i * 4 + 2;
+    cube->indices[i * 6 + 3] = i * 4;
+    cube->indices[i * 6 + 4] = i * 4 + 3;
+    cube->indices[i * 6 + 5] = i * 4 + 2;
   }
 }
 
-void makeCube(struct body *cube, float len, float zoffset){
-  cube->vertices[0].texture[0] = 1.0f;
-  cube->vertices[0].texture[1] = 1.0f;
+/* Where atlasIdx is the (0,0) point of texture */
+void applyTextureCube(struct cube *cube, uint8_t atlasIdx){
+  float x = (atlasIdx % 10) / 10.0f;
+  float y = 0.1f * roundf(atlasIdx / 10.0f);
 
-  cube->vertices[1].texture[0] = 1.0f;
-  cube->vertices[1].texture[1] = 0.0f;
+  printf("\n%f ; %f\n", x, y);
 
-  cube->vertices[2].texture[0] = 0.0f;
-  cube->vertices[2].texture[1] = 0.0f;
+  cube->vertices[0].texture[0] = x;
+  cube->vertices[0].texture[1] = y + 0.1f;
+  cube->vertices[1].texture[0] = x + 0.1f;
+  cube->vertices[1].texture[1] = y + 0.1f;
+  cube->vertices[2].texture[0] = x + 0.1f;
+  cube->vertices[2].texture[1] = y;
+  cube->vertices[3].texture[0] = x;
+  cube->vertices[3].texture[1] = y;
 
-  cube->vertices[3].texture[0] = 0.0f;
-  cube->vertices[3].texture[1] = 1.0f;
+  cube->vertices[4].texture[0] = x + 0.2f;
+  cube->vertices[4].texture[1] = y + 0.1f;
+  cube->vertices[5].texture[0] = x + 0.1f;
+  cube->vertices[5].texture[1] = y + 0.1f;
+  cube->vertices[6].texture[0] = x + 0.1f;
+  cube->vertices[6].texture[1] = y;
+  cube->vertices[7].texture[0] = x + 0.2f;
+  cube->vertices[7].texture[1] = y;
 
-  cube->vertices[0].pos[0] = -0.5f;
-  cube->vertices[0].pos[1] = -0.5f;
-  cube->vertices[0].pos[2] = -0.5f + zoffset;
+  cube->vertices[8].texture[0] = x + 0.3f;
+  cube->vertices[8].texture[1] = y + 0.1f;
+  cube->vertices[9].texture[0] = x + 0.2f;
+  cube->vertices[9].texture[1] = y + 0.1f;
+  cube->vertices[10].texture[0] = x + 0.2f;
+  cube->vertices[10].texture[1] = y;
+  cube->vertices[11].texture[0] = x + 0.3f;
+  cube->vertices[11].texture[1] = y;
 
-  cube->vertices[1].pos[0] =  0.5f;
-  cube->vertices[1].pos[1] = -0.5f;
-  cube->vertices[1].pos[2] = -0.5f + zoffset;
+  cube->vertices[12].texture[0] = x + 0.3f;
+  cube->vertices[12].texture[1] = y + 0.1f;
+  cube->vertices[13].texture[0] = x + 0.4f;
+  cube->vertices[13].texture[1] = y + 0.1f;
+  cube->vertices[14].texture[0] = x + 0.4f;
+  cube->vertices[14].texture[1] = y;
+  cube->vertices[15].texture[0] = x + 0.3f;
+  cube->vertices[15].texture[1] = y;
 
-  cube->vertices[2].pos[0] = 0.5f;
-  cube->vertices[2].pos[1] = 0.5f;
-  cube->vertices[2].pos[2] = -0.5f + zoffset;
+  cube->vertices[16].texture[0] = x + 0.4f;
+  cube->vertices[16].texture[1] = y + 0.1f;
+  cube->vertices[17].texture[0] = x + 0.5f;
+  cube->vertices[17].texture[1] = y + 0.1f;
+  cube->vertices[18].texture[0] = x + 0.5f;
+  cube->vertices[18].texture[1] = y;
+  cube->vertices[19].texture[0] = x + 0.4f;
+  cube->vertices[19].texture[1] = y;
 
-  cube->vertices[3].pos[0] = -0.5f;
-  cube->vertices[3].pos[1] = 0.5f;
-  cube->vertices[3].pos[2] = -0.5f + zoffset;
-
-  cube->vertices[4].pos[0] = -0.5f;
-  cube->vertices[4].pos[1] = -0.5f;
-  cube->vertices[4].pos[2] = 0.5f + zoffset;
-
-  cube->vertices[5].pos[0] =  0.5f;
-  cube->vertices[5].pos[1] = -0.5f;
-  cube->vertices[5].pos[2] = 0.5f + zoffset;
-
-  cube->vertices[6].pos[0] = 0.5f;
-  cube->vertices[6].pos[1] = 0.5f;
-  cube->vertices[6].pos[2] = 0.5f + zoffset;
-
-  cube->vertices[7].pos[0] = -0.5f;
-  cube->vertices[7].pos[1] = 0.5f;
-  cube->vertices[7].pos[2] = 0.5f + zoffset;
-
-  // front
-  cube->indices[0] = 0;
-  cube->indices[1] = 1;
-  cube->indices[2] = 2;
-  cube->indices[3] = 0;
-  cube->indices[4] = 3;
-  cube->indices[5] = 2;
-
-  // back
-  cube->indices[6] = 4;
-  cube->indices[7] = 5;
-  cube->indices[8] = 6;
-  cube->indices[9] = 4;
-  cube->indices[10] = 7;
-  cube->indices[11] = 6;
-
-  // left
-  cube->indices[12] = 0;
-  cube->indices[13] = 4;
-  cube->indices[14] = 7;
-  cube->indices[15] = 0;
-  cube->indices[16] = 3;
-  cube->indices[17] = 7;
-
-  // right
-  cube->indices[18] = 1;
-  cube->indices[19] = 5;
-  cube->indices[20] = 6;
-  cube->indices[21] = 1;
-  cube->indices[22] = 2;
-  cube->indices[23] = 6;
-
-  // up
-  cube->indices[24] = 6;
-  cube->indices[25] = 2;
-  cube->indices[26] = 3;
-  cube->indices[27] = 6;
-  cube->indices[28] = 7;
-  cube->indices[29] = 3;
-
-  // down
-  cube->indices[30] = 5;
-  cube->indices[31] = 1;
-  cube->indices[32] = 0;
-  cube->indices[33] = 5;
-  cube->indices[34] = 4;
-  cube->indices[35] = 0;
+  cube->vertices[20].texture[0] = x + 0.5f;
+  cube->vertices[20].texture[1] = y;
+  cube->vertices[21].texture[0] = x + 0.6f;
+  cube->vertices[21].texture[1] = y;
+  cube->vertices[22].texture[0] = x + 0.6f;
+  cube->vertices[22].texture[1] = y + 0.1f;
+  cube->vertices[23].texture[0] = x + 0.5f;
+  cube->vertices[23].texture[1] = y + 0.1f;
 }
 
+
+/*
 void accelerateBody(struct body *circle, double acceleration){
   if(!circle->onGround)
     circle->velocity[1] += acceleration;
@@ -189,6 +205,7 @@ void moveBodyVelocity(struct body *circle, double deltaTime){
   }
 
   //printf("%.8f %.8f | %.8f %.8f | %1d\n", circle->pos.x, circle->pos.y, circle->velocity.x, circle->velocity.y, circle->onGround);
-
 }
+
+*/
 

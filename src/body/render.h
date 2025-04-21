@@ -1,32 +1,41 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include "../util/util.h"
+#include "../block/block.h"
 
-#define NOFV 8
 #define ACCELERATION 0.98067 * 2.5
 
-typedef struct vertex_t{
-  vec3 pos;
-  vec3 color;
-  vec2 texture;
-} vertex;
 
-struct body{
-  vertex vertices[NOFV];
-  uint32_t indices[36];
+struct global_t {
+  struct window_t {
+    GLFWwindow *window;
+    uint32_t WIDTH;
+    uint32_t HEIGHT;
+  } window;
 
-  vec3 pos;
-  vec3 velocity;
+  struct cam_t {
+    vec3 camPos;
+    vec3 camFront;
+    vec3 camRight;
+    vec3 camUp;
+    vec3 dir;
 
-  float radius;
-  bool onGround;
-} ;
+    float yaw;
+    float pitch;
+  } cam;
 
-struct body initBody(float zoffset);
-void makeCircle(struct body *circle);
-void makeCube(struct body *cube, float len, float zoffset);
-void moveBodyVelocity(struct body *circle, double deltaTime);
-void accelerateBody(struct body *circle, double acceleration);
+
+  struct time_t {
+    double deltaTime;
+    double curFrame;
+    double lastFrame;
+    double lastFrameSum;
+    uint32_t fps;
+  } time;
+};
+
+struct cube initBody(float zoffset);
+void makeCube(struct cube *cube, float zoffset);
+void applyTextureCube(struct cube *cube, uint8_t atlasIdx);
 
 #endif

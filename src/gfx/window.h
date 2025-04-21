@@ -8,6 +8,11 @@
 
 #define TITLE "Learn OpenGL"
 
+struct Window {
+  GLFWwindow *window;
+  size_t width, height;
+};
+
 GLFWwindow *initWindow(void);
 
 #endif

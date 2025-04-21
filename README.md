@@ -14,6 +14,10 @@ Also, be sure to run the executable file (`$ ./bin/game`) from the root dir of t
 `$ make run -j4`\
 `$ make clean && make run -j4`\
 
+## TODO
+- Refactor the whole thing;
+- Change the rendering of cubes, so only render the faces the user can see;
+
 ## Design and Implementation
 
 ### Textures
