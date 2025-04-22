@@ -8,63 +8,63 @@ void initBody(float zoffset){
 
 void makeCube(float zoffset){
   // front
-  cube.vertices[0].pos[0] = -1.0f;
-  cube.vertices[0].pos[1] = -1.0f;
+  cube.vertices[0].pos[0] = 0.0f;
+  cube.vertices[0].pos[1] = 0.0f;
   cube.vertices[0].pos[2] = 1.0f + zoffset;
   cube.vertices[1].pos[0] = 1.0f;
-  cube.vertices[1].pos[1] = -1.0f;
+  cube.vertices[1].pos[1] = 0.0f;
   cube.vertices[1].pos[2] = 1.0f + zoffset;
   cube.vertices[2].pos[0] = 1.0f;
   cube.vertices[2].pos[1] = 1.0f;
   cube.vertices[2].pos[2] = 1.0f + zoffset;
-  cube.vertices[3].pos[0] = -1.0f;
+  cube.vertices[3].pos[0] = 0.0f;
   cube.vertices[3].pos[1] = 1.0f;
   cube.vertices[3].pos[2] = 1.0f + zoffset;
 
   // back
-  cube.vertices[4].pos[0] = -1.0f;
-  cube.vertices[4].pos[1] = -1.0f;
-  cube.vertices[4].pos[2] = -1.0f + zoffset;
+  cube.vertices[4].pos[0] = 0.0f;
+  cube.vertices[4].pos[1] = 0.0f;
+  cube.vertices[4].pos[2] = 0.0f + zoffset;
   cube.vertices[5].pos[0] = 1.0f;
-  cube.vertices[5].pos[1] = -1.0f;
-  cube.vertices[5].pos[2] = -1.0f + zoffset;
+  cube.vertices[5].pos[1] = 0.0f;
+  cube.vertices[5].pos[2] = 0.0f + zoffset;
   cube.vertices[6].pos[0] = 1.0f;
   cube.vertices[6].pos[1] = 1.0f;
-  cube.vertices[6].pos[2] = -1.0f + zoffset;
-  cube.vertices[7].pos[0] = -1.0f;
+  cube.vertices[6].pos[2] = 0.0f + zoffset;
+  cube.vertices[7].pos[0] = 0.0f;
   cube.vertices[7].pos[1] = 1.0f;
-  cube.vertices[7].pos[2] = -1.0f + zoffset;
+  cube.vertices[7].pos[2] = 0.0f + zoffset;
 
   // left
-  cube.vertices[8].pos[0] = -1.0f;
-  cube.vertices[8].pos[1] = -1.0f;
+  cube.vertices[8].pos[0] = 0.0f;
+  cube.vertices[8].pos[1] = 0.0f;
   cube.vertices[8].pos[2] = 1.0f + zoffset;
-  cube.vertices[9].pos[0] = -1.0f;
-  cube.vertices[9].pos[1] = -1.0f;
-  cube.vertices[9].pos[2] = -1.0f + zoffset;
-  cube.vertices[10].pos[0] = -1.0f;
+  cube.vertices[9].pos[0] = 0.0f;
+  cube.vertices[9].pos[1] = 0.0f;
+  cube.vertices[9].pos[2] = 0.0f + zoffset;
+  cube.vertices[10].pos[0] = 0.0f;
   cube.vertices[10].pos[1] = 1.0f;
-  cube.vertices[10].pos[2] = -1.0f + zoffset;
-  cube.vertices[11].pos[0] = -1.0f;
+  cube.vertices[10].pos[2] = 0.0f + zoffset;
+  cube.vertices[11].pos[0] = 0.0f;
   cube.vertices[11].pos[1] = 1.0f;
   cube.vertices[11].pos[2] = 1.0f + zoffset;
 
   // right
   cube.vertices[12].pos[0] = 1.0f;
-  cube.vertices[12].pos[1] = -1.0f;
+  cube.vertices[12].pos[1] = 0.0f;
   cube.vertices[12].pos[2] = 1.0f + zoffset;
   cube.vertices[13].pos[0] = 1.0f;
-  cube.vertices[13].pos[1] = -1.0f;
-  cube.vertices[13].pos[2] = -1.0f + zoffset;
+  cube.vertices[13].pos[1] = 0.0f;
+  cube.vertices[13].pos[2] = 0.0f + zoffset;
   cube.vertices[14].pos[0] = 1.0f;
   cube.vertices[14].pos[1] = 1.0f;
-  cube.vertices[14].pos[2] = -1.0f + zoffset;
+  cube.vertices[14].pos[2] = 0.0f + zoffset;
   cube.vertices[15].pos[0] = 1.0f;
   cube.vertices[15].pos[1] = 1.0f;
   cube.vertices[15].pos[2] = 1.0f + zoffset;
 
   // up
-  cube.vertices[16].pos[0] = -1.0f;
+  cube.vertices[16].pos[0] = 0.0f;
   cube.vertices[16].pos[1] = 1.0f;
   cube.vertices[16].pos[2] = 1.0f + zoffset;
   cube.vertices[17].pos[0] = 1.0f;
@@ -72,24 +72,24 @@ void makeCube(float zoffset){
   cube.vertices[17].pos[2] = 1.0f + zoffset;
   cube.vertices[18].pos[0] = 1.0f;
   cube.vertices[18].pos[1] = 1.0f;
-  cube.vertices[18].pos[2] = -1.0f + zoffset;
-  cube.vertices[19].pos[0] = -1.0f;
+  cube.vertices[18].pos[2] = 0.0f + zoffset;
+  cube.vertices[19].pos[0] = 0.0f;
   cube.vertices[19].pos[1] = 1.0f;
-  cube.vertices[19].pos[2] = -1.0f + zoffset;
+  cube.vertices[19].pos[2] = 0.0f + zoffset;
 
   // down
-  cube.vertices[20].pos[0] = -1.0f;
-  cube.vertices[20].pos[1] = -1.0f;
+  cube.vertices[20].pos[0] = 0.0f;
+  cube.vertices[20].pos[1] = 0.0f;
   cube.vertices[20].pos[2] = 1.0f + zoffset;
   cube.vertices[21].pos[0] = 1.0f;
-  cube.vertices[21].pos[1] = -1.0f;
+  cube.vertices[21].pos[1] = 0.0f;
   cube.vertices[21].pos[2] = 1.0f + zoffset;
   cube.vertices[22].pos[0] = 1.0f;
-  cube.vertices[22].pos[1] = -1.0f;
-  cube.vertices[22].pos[2] = -1.0f + zoffset;
-  cube.vertices[23].pos[0] = -1.0f;
-  cube.vertices[23].pos[1] = -1.0f;
-  cube.vertices[23].pos[2] = -1.0f + zoffset;
+  cube.vertices[22].pos[1] = 0.0f;
+  cube.vertices[22].pos[2] = 0.0f + zoffset;
+  cube.vertices[23].pos[0] = 0.0f;
+  cube.vertices[23].pos[1] = 0.0f;
+  cube.vertices[23].pos[2] = 0.0f + zoffset;
 
   for(int i = 0; i < 6; ++i){
     cube.indices[i * 6] = i * 4;

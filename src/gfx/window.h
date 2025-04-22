@@ -3,8 +3,8 @@
 
 #include "../util/util.h"
 #define TITLE "Learn OpenGL"
-#define WIDTH 960
-#define HEIGHT 540
+#define WIDTH 1440
+#define HEIGHT 840
 
 struct Window {
   GLFWwindow *window;

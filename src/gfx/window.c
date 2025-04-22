@@ -25,6 +25,11 @@ static void mouseCallback(GLFWwindow *window, double x, double y){
   renderer.cam.yaw += offsetX;
   renderer.cam.pitch -= offsetY;
 
+  if(renderer.cam.pitch > 89.0f)
+    renderer.cam.pitch = 89.0f;
+  if(renderer.cam.pitch < -89.0f)
+    renderer.cam.pitch = -89.0f;
+
   renderer.cam.camFront[0] = cos(glm_rad(renderer.cam.yaw)) * cos(glm_rad(renderer.cam.pitch));
   renderer.cam.camFront[1] = sin(glm_rad(renderer.cam.pitch));
   renderer.cam.camFront[2] = sin(glm_rad(renderer.cam.yaw)) * cos(glm_rad(renderer.cam.pitch));

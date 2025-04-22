@@ -6,12 +6,18 @@
 #define NOFV 24 /* Number Of Vertices */
 #define NOFI 36 /* Number Of Indices */
 
-enum blockType {
+typedef enum blockID_t {
   debug = 0,
-  dirt = 1,
-  grass = 2,
-  stone = 3,
-};
+  air = 1,
+  dirt = 2,
+  grass = 3,
+  stone = 4,
+} blockID;
+
+typedef enum blockAttrib_t {
+  solid = 0,
+  transparent = 1,
+} blockAttrib;
 
 typedef struct vertex_t {
   vec3 pos;
@@ -29,7 +35,8 @@ struct cube {
    * (bad english) :-)
   */
 
-  uint8_t blockType;
+  blockID blockID;
+  blockAttrib blockAttributes;
   uint8_t atlasIdx;
 };
 

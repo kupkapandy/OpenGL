@@ -1,7 +1,7 @@
 #include "time.h"
 #include "../body/render.h"
 
-void initTime(struct Window *window){
+void initTime(){
   global.window.deltaTime = 0.0f;
 
   global.window.curFrame = 0.0f;
@@ -11,7 +11,7 @@ void initTime(struct Window *window){
   global.window.fps = 0.0f;
 }
 
-void getDeltaTime(struct Window *window){
+void getDeltaTime(){
   global.window.curFrame = glfwGetTime();
   global.window.deltaTime = global.window.curFrame - global.window.lastFrame;
   global.window.lastFrame = global.window.curFrame;
