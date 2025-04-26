@@ -19,27 +19,60 @@ typedef enum blockAttrib_t {
   transparent = 1,
 } blockAttrib;
 
-typedef struct vertex_t {
+struct vertex {
   vec3 pos;
-  vec2 texture;
-} vertex;
+  vec2 tex;
+};
 
-struct cube {
-  vertex vertices[NOFV];
-  uint32_t indices[NOFI];
-
-  vec3 pos;
-
-  /* For example if block have other texture on top or down,
-   * we will need to know it, so we will just change it
-   * (bad english) :-)
-  */
+struct block {
+  struct vertex vertices[NOFV];
 
   blockID blockID;
   blockAttrib blockAttributes;
-  uint8_t atlasIdx;
+  uint8_t textureID;
 };
 
-extern struct cube cube;
+static const float vertices[] = {
+  0.0f, 0.0f, 1.0f,
+  1.0f, 0.0f, 1.0f,
+  1.0f, 1.0f, 1.0f,
+  0.0f, 1.0f, 1.0f,
+
+  0.0f, 0.0f, 0.0f,
+  1.0f, 0.0f, 0.0f,
+  1.0f, 1.0f, 0.0f,
+  0.0f, 1.0f, 0.0f,
+
+  1.0f, 0.0f, 1.0f,
+  1.0f, 0.0f, 0.0f,
+  1.0f, 1.0f, 0.0f,
+  1.0f, 1.0f, 1.0f,
+
+  0.0f, 0.0f, 1.0f,
+  0.0f, 0.0f, 0.0f,
+  0.0f, 1.0f, 0.0f,
+  0.0f, 1.0f, 1.0f,
+
+  0.0f, 1.0f, 1.0f,
+  1.0f, 1.0f, 1.0f,
+  1.0f, 1.0f, 0.0f,
+  0.0f, 1.0f, 0.0f,
+
+  0.0f, 0.0f, 1.0f,
+  1.0f, 0.0f, 1.0f,
+  1.0f, 0.0f, 0.0f,
+  0.0f, 0.0f, 0.0f,
+};
+
+static const unsigned int indices[] = {
+  0, 1, 2, 0, 3, 2, // Z+
+  4, 5, 6, 4, 7, 6, // Z-
+  8, 9, 10, 8, 11, 10, // X+
+  12, 13, 14, 12, 15, 14, // X-
+  16, 17, 18, 16, 19, 18, // Y+
+  20, 21, 22, 20, 23, 22, // Y-
+};
+
+extern struct block block;
 
 #endif

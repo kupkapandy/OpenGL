@@ -1,7 +1,7 @@
 #include "window.h"
-#include "../body/render.h"
+#include "render.h"
 
-static void framebufferSizeCallback(GLFWwindow* window, int width, int height){
+static inline void windowSizeCallBack(GLFWwindow* window, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
@@ -34,35 +34,40 @@ static void mouseCallback(GLFWwindow *window, double x, double y){
   renderer.cam.camFront[1] = sin(glm_rad(renderer.cam.pitch));
   renderer.cam.camFront[2] = sin(glm_rad(renderer.cam.yaw)) * cos(glm_rad(renderer.cam.pitch));
   glm_normalize(renderer.cam.camFront);
+
+  printf("%f %f %f\n", renderer.cam.camPos[0], renderer.cam.camPos[1], renderer.cam.camPos[2]);
+
 }
 
-void initWindow(void){
-  global.window.width = WIDTH;
-  global.window.height = HEIGHT;
-  glfwInit();
+void createWindow(void) {
+  if(!glfwInit()) {
+    fprintf(stderr, "GLFW failed to initialize!");
+    exit(1);
+  }
+
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  if((global.window.window = glfwCreateWindow(global.window.width, global.window.height, "Learn OpenGL", NULL, NULL)) == NULL){
+  if((window.window = glfwCreateWindow(WIDTH, HEIGHT, "Learn OpenGL", NULL, NULL)) == NULL) {
     fprintf(stderr, "Failed to create GLFW window\n");
     glfwTerminate();
     exit(1);
   }
 
-  glfwMakeContextCurrent(global.window.window);
+  glfwMakeContextCurrent(window.window);
   glfwSwapInterval(0);
 
-  glfwSetInputMode(global.window.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-  if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+  if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     fprintf(stderr, "Failed to initialize GLAD\n");
+    glfwTerminate();
     exit(1);
   }
 
-  glfwSetFramebufferSizeCallback(global.window.window, framebufferSizeCallback);
-  glfwSetCursorPosCallback(global.window.window, mouseCallback);
+  glfwSetInputMode(window.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  glfwSetFramebufferSizeCallback(window.window, windowSizeCallBack);
+  glfwSetCursorPosCallback(window.window, mouseCallback);
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glEnable(GL_DEPTH_TEST);
 }

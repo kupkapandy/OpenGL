@@ -4,7 +4,6 @@
 #include "../util/util.h"
 #include "../gfx/window.h"
 
-void initTime();
 void getDeltaTime();
 
 #endif

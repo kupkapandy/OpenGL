@@ -1,6 +1,5 @@
 #include "shader.h"
 
-
 static const char *readShader(const char *path){
   FILE *fp;
   if((fp = fopen(path, "r")) == NULL){
@@ -25,6 +24,28 @@ static const char *readShader(const char *path){
 
   p[fileSize] = '\0';
   return p;
+}
+
+static void shaderLog(GLuint shader){
+  int success;
+  char infoLog[512];
+
+  glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+  if (!success){
+    glGetShaderInfoLog(shader, 512, NULL, infoLog);
+    printf("error, shader compilation failed\nshader id: %d\n%s\n", shader, infoLog);
+  }
+}
+
+static void programLog(GLuint program){
+  int success;
+  char infoLog[512];
+
+  glGetProgramiv(program, GL_LINK_STATUS, &success);
+  if(!success){
+    glGetProgramInfoLog(program, 512, NULL, infoLog);
+    printf("error, shader program linking failed\nprogram id: %d\n%s\n", program, infoLog);
+  }
 }
 
 GLuint createShader(GLenum type, const char *path){
@@ -59,27 +80,4 @@ void createProgram(GLuint *shaderProgram, GLuint cnt, ...){
 
 void deleteProgram(GLuint shaderProgram){
   glDeleteProgram(shaderProgram);
-}
-
-
-void shaderLog(GLuint shader){
-  int success;
-  char infoLog[512];
-
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-  if (!success){
-    glGetShaderInfoLog(shader, 512, NULL, infoLog);
-    printf("error, shader compilation failed\nshader id: %d\n%s\n", shader, infoLog);
-  }
-}
-
-void programLog(GLuint program){
-  int success;
-  char infoLog[512];
-
-  glGetProgramiv(program, GL_LINK_STATUS, &success);
-  if(!success){
-    glGetProgramInfoLog(program, 512, NULL, infoLog);
-    printf("error, shader program linking failed\nprogram id: %d\n%s\n", program, infoLog);
-  }
 }

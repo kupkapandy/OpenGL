@@ -19,6 +19,12 @@
 #include <string.h>
 #include <math.h>
 
+#define TITLE "Learn OpenGL"
+#define WIDTH 1440
+#define HEIGHT 840
+
+#define camSpeed 10.0f
+
 #define PI 3.14159265358979f
 #define radians(_x) ((_x) * (__typeof__(_x)) (PI / 180.0f))
 #define degrees(_x) ((_x) * (__typeof__(_x)) (180.0f / PI))

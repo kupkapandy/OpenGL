@@ -1,7 +1,7 @@
 #include "camera.h"
-#include "../body/render.h"
+#include "../gfx/render.h"
 
-void initCam(void){
+void createCam(void){
   renderer.cam = (struct Camera){
     .yaw = -90.0f,
     .pitch = 0.0f,

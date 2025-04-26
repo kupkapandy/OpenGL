@@ -4,7 +4,7 @@
 
 GLuint loadImage(const char *path){
   int nrChannels, width, height;
-  unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
+  unsigned char *data;
 
   if((data = stbi_load(path, &width, &height, &nrChannels, 0)) == NULL){
     fprintf(stderr, "Error - Failed to load texture!\n");
@@ -14,6 +14,7 @@ GLuint loadImage(const char *path){
 
   GLuint texture;
   glGenTextures(1, &texture);
+  glBindTexture(GL_TEXTURE_2D, texture);
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
   glGenerateMipmap(GL_TEXTURE_2D);

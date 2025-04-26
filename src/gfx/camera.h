@@ -3,10 +3,6 @@
 
 #include "../util/util.h"
 
-#define camSpeed 10.0f
-#define startPos {0.0f, 0.0f, 3.0f}
-#define origin (vec3){0.0f, 0.0f, 0.0f}
-
 struct Camera {
   vec3 camPos;
   vec3 camFront;
@@ -18,6 +14,6 @@ struct Camera {
   float pitch;
 };
 
-void initCam(void);
+void createCam(void);
 
 #endif

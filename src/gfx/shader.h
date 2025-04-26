@@ -6,7 +6,5 @@
 GLuint createShader(GLenum type, const char *path);
 void createProgram(GLuint *shaderProgram, GLuint cnt, ...);
 void deleteProgram(GLuint shaderProgram);
-void shaderLog(GLuint shader);
-void programLog(GLuint program);
 
 #endif
